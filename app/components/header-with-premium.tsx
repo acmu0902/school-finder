@@ -6,6 +6,7 @@ export default async function HeaderWithPremium() {
   let showPremiumLink = false
 
   try {
+    // Wrap cookie access in try/catch to handle static generation
     const cookieStore = cookies()
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -60,7 +61,12 @@ export default async function HeaderWithPremium() {
       console.error("Error getting user:", userError)
     }
   } catch (error) {
-    console.error("Error in HeaderWithPremium:", error instanceof Error ? error.message : String(error))
+    // Provide fallback during static generation when cookies are not available
+    console.error(
+      "Error in HeaderWithPremium (likely during static generation):",
+      error instanceof Error ? error.message : String(error),
+    )
+    // Continue with default behavior
   }
 
   // Always return a header component, even if there was an error
