@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import type React from "react"
 
 import { useState, useEffect } from "react"
@@ -348,10 +350,16 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
       })
 
       if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`)
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+        console.error("API error:", response.status, errorData)
+        throw new Error(errorData.error || `API request failed with status ${response.status}`)
       }
 
       const data = await response.json()
+      if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
+        throw new Error("Invalid response format from API")
+      }
+
       const content = data.choices[0].message.content
 
       // Parse the JSON response
@@ -389,6 +397,7 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
       }
     } catch (error) {
       console.error("Error generating pros and cons:", error)
+      setProsAndCons({ pros: ["無法生成優點"], cons: ["無法生成缺點"] })
     } finally {
       setIsLoadingProsAndCons(false)
     }

@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import SchoolDetailTabs from "@/app/components/school-detail-tabs"
 
+export const dynamic = "force-dynamic"
+
 // Initialize Supabase client with error handling
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY

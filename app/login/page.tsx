@@ -10,6 +10,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Mail, Lock } from "lucide-react"
 import { useAuth } from "@/lib/auth-context-simple"
 
+export const dynamic = "force-dynamic"
+
 export default function LoginPage() {
   const { user, isLoading: authLoading, signIn, signUp } = useAuth()
   const redirected = useRef(false)

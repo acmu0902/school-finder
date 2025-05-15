@@ -8,6 +8,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, School, Sparkles } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+export const dynamic = "force-dynamic"
+
 // Initialize Supabase client with error handling
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -220,29 +222,39 @@ Question: ${question.question}
 
 Your answer should be concise (around 100-150 words), authentic, and show that you've done your research about the school.`
 
-        // Call our own API route instead of directly calling Grok API
-        const response = await fetch("/api/grok", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt }),
-        })
+        try {
+          // Call our own API route with improved error handling
+          const response = await fetch("/api/grok", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt }),
+          })
 
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error || `API request failed with status ${response.status}`)
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+            console.error("API error:", response.status, errorData)
+            throw new Error(errorData.error || `API request failed with status ${response.status}`)
+          }
+
+          const data = await response.json()
+          if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
+            throw new Error("Invalid response format from API")
+          }
+
+          const answer = data.choices[0].message.content
+          answers[question.id] = answer
+        } catch (questionError) {
+          console.error(`Error generating answer for question ${question.id}:`, questionError)
+          answers[question.id] = `無法生成回答: ${questionError instanceof Error ? questionError.message : "未知錯誤"}`
         }
-
-        const data = await response.json()
-        const answer = data.choices[0].message.content
-        answers[question.id] = answer
       }
 
       setAiAnswers(answers)
     } catch (error) {
       console.error("Error generating AI answers:", error)
-      setAiError("無法生成AI回答，請稍後再試")
+      setAiError(`無法生成AI回答: ${error instanceof Error ? error.message : "未知錯誤"}。請稍後再試。`)
     } finally {
       setIsGeneratingAnswers(false)
     }

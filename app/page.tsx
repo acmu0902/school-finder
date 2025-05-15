@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import HomeButtonsWrapper from "./components/home-buttons-wrapper"
