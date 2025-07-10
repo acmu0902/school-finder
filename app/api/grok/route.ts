@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
 
-// Grok AI API configuration
-const GROK_API_KEY = "xai-njlcLxwLbsMo91Vm49dK9BPtwj5ynAfoI397yzeJahFU9ZEraGIRdDHR0gxgm1mVfK89qb124GWhPKH3"
-const GROK_MODEL = "grok-3-beta"
+// Use environment variable for API key
+const GROK_API_KEY = process.env.XAI_API_KEY
+const GROK_MODEL = "grok-2-1212" // Updated to use the correct model name
 
 export async function POST(request: Request) {
   try {
@@ -10,6 +10,16 @@ export async function POST(request: Request) {
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 })
+    }
+
+    if (!GROK_API_KEY) {
+      console.error("XAI_API_KEY environment variable is not configured")
+      return NextResponse.json(
+        {
+          error: "xAI API key is not configured. Please add the XAI_API_KEY environment variable.",
+        },
+        { status: 503 },
+      )
     }
 
     const response = await fetch("https://api.x.ai/v1/chat/completions", {
@@ -26,17 +36,14 @@ export async function POST(request: Request) {
             content: prompt,
           },
         ],
-        temperature: 0.6,
+        temperature: 0.7,
       }),
     })
 
     if (!response.ok) {
       const errorText = await response.text()
       console.error("Grok API error:", errorText)
-      return NextResponse.json(
-        { error: `API request failed with status ${response.status}` },
-        { status: response.status },
-      )
+      return NextResponse.json({ error: `xAI API request failed: ${errorText}` }, { status: response.status })
     }
 
     const data = await response.json()

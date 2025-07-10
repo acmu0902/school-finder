@@ -26,59 +26,13 @@ if (typeof window !== "undefined" && supabaseUrl && supabaseAnonKey) {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: false, // Disable automatic URL detection
+        detectSessionInUrl: false,
       },
     })
   } catch (error) {
     console.error("Failed to initialize Supabase client:", error)
   }
 }
-
-// Mock comments data for demonstration
-const MOCK_COMMENTS = [
-  {
-    id: 1,
-    school_name: "聖保羅幼稚園",
-    comment:
-      "校服質素好好，但價錢偏貴。學校用品清單詳細，開學前有足夠時間準備。冬季校服保暖度高，夏季校服透氣舒適。書包設計實用，適合幼兒使用。文具要求合理，沒有過多特殊要求。",
-    category: "學校用品同校服",
-  },
-  {
-    id: 2,
-    school_name: "聖保羅幼稚園",
-    comment:
-      "課程全面，涵蓋語言、數學、藝術和體能發展。老師經驗豐富，教學方法生動有趣。小班教學，每個孩子都得到充分關注。定期有家長會，了解孩子學習進度。提供多元化學習活動，培養孩子各方面能力。",
-    category: "學術課程同教學質素",
-  },
-  {
-    id: 3,
-    school_name: "聖保羅幼稚園",
-    comment:
-      "學校規章制度清晰，家長手冊詳細說明各項政策。請假程序簡單，可通過電話或應用程式完成。學校安全措施完善，進出需要識別。定期舉行火災演習，確保緊急情況下的安全。溝通渠道暢通，老師樂意解答家長疑問。",
-    category: "學校政策同程序",
-  },
-  {
-    id: 4,
-    school_name: "聖保羅幼稚園",
-    comment:
-      "孩子在學校很開心，每天都期待上學。提供健康均衡的午餐和小食。操場設施豐富，孩子有足夠活動空間。關注孩子情緒發展，有專業輔導支援。班級氣氛和諧，孩子間友誼良好。",
-    category: "學生福祉同體驗",
-  },
-  {
-    id: 5,
-    school_name: "聖保羅幼稚園",
-    comment:
-      "入學申請程序清晰，網上系統方便使用。面試氣氛輕鬆，主要觀察孩子社交能力。錄取標準公平，不只看學術能力。學費合理，有清晰的繳費時間表。新生適應期安排妥善，幫助孩子順利過渡。",
-    category: "招生同入學",
-  },
-  {
-    id: 6,
-    school_name: "瑪利諾修院學校（小學部）",
-    comment:
-      "校服設計典雅，質料舒適耐穿。書包輕便，適合小朋友使用。文具要求合理，開學前有詳細清單。冬季校服保暖，夏季校服透氣。學校用品可在指定商店購買，價格合理。",
-    category: "學校用品同校服",
-  },
-]
 
 export default function ParentsCommentsPage() {
   const router = useRouter()
@@ -109,23 +63,17 @@ export default function ParentsCommentsPage() {
   useEffect(() => {
     const initializeAuth = async () => {
       if (!supabase) {
-        console.error("Supabase client not initialized")
         setError("無法初始化 Supabase 客戶端")
         setIsLoading(false)
-        setAuthInitialized(true) // Mark as initialized even if it failed
-        // Continue with demo mode
-        await fetchDistrictsAndSchools()
         return
       }
 
       try {
         setAuthInitialized(true)
-        // Fetch districts and schools without checking subscription
-        // This allows the page to load even if there's an auth issue
         await fetchDistrictsAndSchools()
       } catch (err) {
         console.error("Auth initialization error:", err)
-        // Continue with demo mode
+        setError("初始化失敗")
       } finally {
         setIsLoading(false)
       }
@@ -138,56 +86,26 @@ export default function ParentsCommentsPage() {
 
   // Check if user has premium subscription
   useEffect(() => {
-    // Allow all users to access this feature
     setIsPremium(true)
   }, [authInitialized])
 
   // Fetch districts and schools
   const fetchDistrictsAndSchools = async () => {
-    try {
-      if (!supabase) {
-        console.error("Supabase client not available for fetching schools")
-        setError("無法連接到數據庫，顯示演示數據")
-        // Use mock data if Supabase is not available
-        const mockSchools = MOCK_COMMENTS.map((comment) => ({
-          id: comment.id.toString(),
-          name: comment.school_name,
-          district: "示範區域",
-        })).filter((school, index, self) => index === self.findIndex((s) => s.name === school.name))
-
-        setSchools(mockSchools)
-        const uniqueDistricts = ["示範區域"]
-        setDistricts(uniqueDistricts)
-        return
-      }
-
-      const { data, error } = await supabase.from("school_details_new_duplicate").select("*").order("name")
-
-      if (error) {
-        console.error("Error fetching schools:", error)
-        throw error
-      }
-
-      setSchools(data || [])
-
-      // Extract unique districts
-      const uniqueDistricts = [...new Set(data?.map((school) => school.district).filter(Boolean))]
-      setDistricts(uniqueDistricts as string[])
-    } catch (error) {
-      console.error("Error in fetchDistrictsAndSchools:", error)
-      setError("無法載入學校資料，顯示演示數據")
-
-      // Use mock data as fallback
-      const mockSchools = MOCK_COMMENTS.map((comment) => ({
-        id: comment.id.toString(),
-        name: comment.school_name,
-        district: "示範區域",
-      })).filter((school, index, self) => index === self.findIndex((s) => s.name === school.name))
-
-      setSchools(mockSchools)
-      const uniqueDistricts = ["示範區域"]
-      setDistricts(uniqueDistricts)
+    if (!supabase) {
+      throw new Error("Supabase client not available")
     }
+
+    const { data, error } = await supabase.from("school_details_new_duplicate").select("*").order("name")
+
+    if (error) {
+      throw error
+    }
+
+    setSchools(data || [])
+
+    // Extract unique districts
+    const uniqueDistricts = [...new Set(data?.map((school) => school.district).filter(Boolean))]
+    setDistricts(uniqueDistricts as string[])
   }
 
   // Filter schools when district changes
@@ -243,16 +161,8 @@ export default function ParentsCommentsPage() {
           generateProsAndCons(schoolData.name, schoolData.parents_comments)
         }
 
-        // In a real implementation, fetch comments from database
-        // For now, use mock data and filter by school name
-        const schoolComments = MOCK_COMMENTS.filter((comment) => comment.school_name === schoolData.name)
-
-        if (schoolComments.length > 0) {
-          setComments(schoolComments)
-        } else {
-          // If no comments found, generate them using Grok AI
-          await generateCommentsWithAI(schoolData.name)
-        }
+        // Generate comments using AI
+        await generateCommentsWithAI(schoolData.name)
       } catch (error) {
         console.error("Error fetching school details or comments:", error)
         setCommentsError("無法載入學校資料或評論，請稍後再試")
@@ -315,28 +225,11 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
         })
       } catch (parseError) {
         console.error("Error parsing pros and cons JSON:", parseError)
-        // Fallback: try to extract pros and cons using regex if JSON parsing fails
-        const prosMatch = content.match(/pros[:\s]+([\s\S]*?)(?=cons|$)/i)
-        const consMatch = content.match(/cons[:\s]+([\s\S]*?)(?=$)/i)
-
-        const pros = prosMatch
-          ? prosMatch[1]
-              .split(/\n-|\n\d+\./)
-              .filter(Boolean)
-              .map((item) => item.trim())
-          : []
-        const cons = consMatch
-          ? consMatch[1]
-              .split(/\n-|\n\d+\./)
-              .filter(Boolean)
-              .map((item) => item.trim())
-          : []
-
-        setProsAndCons({ pros, cons })
+        throw new Error("Failed to parse AI response")
       }
     } catch (error) {
       console.error("Error generating pros and cons:", error)
-      setProsAndCons({ pros: ["無法生成優點"], cons: ["無法生成缺點"] })
+      throw error
     } finally {
       setIsLoadingProsAndCons(false)
     }
@@ -344,55 +237,47 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
 
   // Generate comments using Grok AI
   const generateCommentsWithAI = async (schoolName: string) => {
-    try {
-      const categories = [
-        "學校用品同校服",
-        "學術課程同教學質素",
-        "學校政策同程序",
-        "學生福祉同體驗",
-        "招生同入學",
-        "優點和缺點",
-      ]
+    const categories = ["學校用品同校服", "學術課程同教學質素", "學校政策同程序", "學生福祉同體驗", "招生同入學"]
 
-      const generatedComments = []
+    const generatedComments = []
 
-      for (const category of categories) {
-        const prompt = `你是一個幫助家長了解學校的AI助手。請為"${schoolName}"生成一個關於"${category}"的家長評論摘要。評論應該是5個要點的簡短摘要，每個要點一句話，使用繁體中文，並以家長的角度撰寫。`
+    for (const category of categories) {
+      const prompt = `你是一個幫助家長了解學校的AI助手。請為"${schoolName}"生成一個關於"${category}"的家長評論摘要。評論應該是5個要點的簡短摘要，每個要點一句話，使用繁體中文，並以家長的角度撰寫。`
 
-        // Call our API route to generate comment
-        const response = await fetch("/api/grok", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt }),
-        })
+      // Call our API route to generate comment
+      const response = await fetch("/api/grok", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      })
 
-        if (!response.ok) {
-          throw new Error(`API request failed with status ${response.status}`)
-        }
-
-        const data = await response.json()
-        const comment = data.choices[0].message.content
-
-        generatedComments.push({
-          id: generatedComments.length + 1,
-          school_name: schoolName,
-          comment,
-          category,
-        })
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+        throw new Error(errorData.error || `API request failed with status ${response.status}`)
       }
 
-      setComments(generatedComments)
-    } catch (error) {
-      console.error("Error generating comments with AI:", error)
-      setCommentsError("無法生成AI評論，請稍後再試")
+      const data = await response.json()
+      if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
+        throw new Error("Invalid response format from API")
+      }
+
+      const comment = data.choices[0].message.content
+
+      generatedComments.push({
+        id: generatedComments.length + 1,
+        school_name: schoolName,
+        comment,
+        category,
+      })
     }
+
+    setComments(generatedComments)
   }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Implement search functionality if needed
   }
 
   const resetFilters = () => {
