@@ -58,6 +58,16 @@ export default function RootLayout({
 
               <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/80">
                 <p>&copy; {new Date().getFullYear()} SmartStart. 版權所有。</p>
+                <p className="mt-2">
+                  <a
+                    href="https://sites.google.com/view/smartstartone/home"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/80 hover:text-white underline"
+                  >
+                    隱私政策
+                  </a>
+                </p>
               </div>
             </div>
           </footer>
