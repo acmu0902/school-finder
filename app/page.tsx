@@ -3,101 +3,31 @@ export const dynamic = "force-dynamic"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import HomeButtonsWrapper from "./components/home-buttons-wrapper"
-import { createClient } from "@supabase/supabase-js"
-import { cookies } from "next/headers"
 import { Suspense } from "react"
-import PremiumButtonsClient from "./components/premium-buttons-client"
 
-// This is a Server Component that checks for premium subscription
+// This is a Server Component that shows premium buttons to all users
 async function PremiumButton() {
-  try {
-    const cookieStore = cookies()
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    // Check if environment variables are available
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error("Supabase environment variables are missing")
-      return null
-    }
-
-    // Create a Supabase client for server-side
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
-        get(name) {
-          try {
-            return cookieStore.get(name)?.value
-          } catch (error) {
-            console.error("Error accessing cookie:", error)
-            return undefined
-          }
-        },
-      },
-      auth: {
-        persistSession: false,
-      },
-    })
-
-    // Get the current user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      return null
-    }
-
-    console.log("Server: User found:", user.id)
-
-    // Use admin client for checking subscription if available
-    const adminClient = serviceRole ? createClient(supabaseUrl, serviceRole) : supabase
-
-    // Check if user has premium subscription
-    const { data: subscription, error } = await adminClient
-      .from("subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("plan_type", "premium")
-      .eq("status", "active")
-      .limit(1)
-
-    if (error) {
-      console.error("Server: Error checking subscription:", error)
-      return null
-    }
-
-    console.log("Server: Subscription check result:", subscription)
-
-    if (!subscription || subscription.length === 0) {
-      return null
-    }
-
-    // User has premium subscription, show the buttons directly
-    return (
-      <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/portfolio">
-          <Button
-            size="lg"
-            className="w-full sm:w-auto bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white px-8 py-6 rounded-full font-bold text-lg"
-          >
-            家長評論
-          </Button>
-        </a>
-        <a href="/interview-prep">
-          <Button
-            size="lg"
-            className="w-full sm:w-auto bg-[#0092D0] hover:bg-[#0092D0]/80 text-white px-8 py-6 rounded-full font-bold text-lg"
-          >
-            面試準備
-          </Button>
-        </a>
-      </div>
-    )
-  } catch (error) {
-    console.error("Error in PremiumButton:", error instanceof Error ? error.message : String(error))
-    return null
-  }
+  // Always show the buttons to all users - no authentication required
+  return (
+    <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/portfolio">
+        <Button
+          size="lg"
+          className="w-full sm:w-auto bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white px-8 py-6 rounded-full font-bold text-lg"
+        >
+          家長評論
+        </Button>
+      </a>
+      <a href="/interview-prep">
+        <Button
+          size="lg"
+          className="w-full sm:w-auto bg-[#0092D0] hover:bg-[#0092D0]/80 text-white px-8 py-6 rounded-full font-bold text-lg"
+        >
+          面試準備
+        </Button>
+      </a>
+    </div>
+  )
 }
 
 export default function HomePage() {
@@ -132,7 +62,6 @@ export default function HomePage() {
           </Suspense>
 
           {/* Client-side fallback for premium buttons */}
-          <PremiumButtonsClient />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">

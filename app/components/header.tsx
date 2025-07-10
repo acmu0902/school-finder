@@ -55,6 +55,13 @@ export default function Header({ showPremiumLink = false }: HeaderProps) {
 
           <nav className="hidden md:flex items-center space-x-8">
             <a
+              href="/"
+              className="text-[#4CAF50] hover:text-[#4CAF50]/80 font-bold text-lg transform hover:scale-105 transition-transform"
+              style={{ fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif" }}
+            >
+              主頁
+            </a>
+            <a
               href="/schools"
               className="text-[#0092D0] hover:text-[#0092D0]/80 font-bold text-lg transform hover:scale-105 transition-transform"
               style={{ fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif" }}
@@ -62,11 +69,18 @@ export default function Header({ showPremiumLink = false }: HeaderProps) {
               學校搜尋
             </a>
             <a
-              href="/subscription"
+              href="/portfolio"
               className="text-[#F7941D] hover:text-[#F7941D]/80 font-bold text-lg transform hover:scale-105 transition-transform"
               style={{ fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif" }}
             >
-              訂閱計劃
+              家長評論
+            </a>
+            <a
+              href="/interview-prep"
+              className="text-[#6A5ACD] hover:text-[#6A5ACD]/80 font-bold text-lg transform hover:scale-105 transition-transform"
+              style={{ fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif" }}
+            >
+              面試準備
             </a>
             <a
               href="/about"
@@ -75,16 +89,6 @@ export default function Header({ showPremiumLink = false }: HeaderProps) {
             >
               關於我們
             </a>
-            {/* Premium Menu Link - only shown to premium subscribers */}
-            {mounted && showPremiumLink && (
-              <a
-                href="/interview-prep"
-                className="text-[#6A5ACD] hover:text-[#6A5ACD]/80 font-bold text-lg transform hover:scale-105 transition-transform"
-                style={{ fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif" }}
-              >
-                面試準備
-              </a>
-            )}
           </nav>
 
           <div className="flex items-center space-x-4">
@@ -108,24 +112,7 @@ export default function Header({ showPremiumLink = false }: HeaderProps) {
                   </Button>
                 </div>
               </>
-            ) : (
-              <>
-                <a href="/login">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="bg-[#92B6F0] border-[#0092D0] text-[#FFFFFF] hover:bg-[#0092D0] hover:text-white"
-                  >
-                    登入
-                  </Button>
-                </a>
-                <a href="/login?tab=register" className="hidden md:block">
-                  <Button size="sm" className="bg-[#FFAA5A] hover:bg-[#FFAA5A]/80 text-white">
-                    註冊
-                  </Button>
-                </a>
-              </>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

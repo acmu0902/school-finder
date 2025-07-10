@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react"
 import { createClient } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, School, Sparkles } from "lucide-react"
+import { AlertCircle, School, Sparkles, Info } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export const dynamic = "force-dynamic"
@@ -83,54 +82,13 @@ export default function InterviewPrepPage() {
 
   // Check if user has premium subscription
   useEffect(() => {
-    async function checkSubscription() {
-      try {
-        setIsLoading(true)
+    // Allow all users to access this feature
+    setIsLoading(false)
+    setIsPremium(true)
 
-        // Get current user
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-
-        if (!user) {
-          router.push("/login")
-          return
-        }
-
-        // Check if user has premium subscription
-        const { data: subscription, error } = await supabase
-          .from("subscriptions")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("plan_type", "premium")
-          .eq("status", "active")
-          .single()
-
-        if (error && error.code !== "PGRST116") {
-          console.error("Error checking subscription:", error)
-          setError("無法檢查訂閱狀態，請稍後再試")
-          return
-        }
-
-        if (!subscription) {
-          setError("此功能僅適用於高級訂閱用戶")
-          return
-        }
-
-        setIsPremium(true)
-
-        // Fetch districts and schools
-        fetchDistrictsAndSchools()
-      } catch (err) {
-        console.error("Unexpected error:", err)
-        setError("發生錯誤，請稍後再試")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    checkSubscription()
-  }, [router])
+    // Fetch districts and schools for all users
+    fetchDistrictsAndSchools()
+  }, [])
 
   // Fetch districts and schools
   const fetchDistrictsAndSchools = async () => {
@@ -276,11 +234,6 @@ Your answer should be concise (around 100-150 words), authentic, and show that y
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
-        <div className="text-center mt-8">
-          <Button onClick={() => router.push("/subscription")} className="bg-[#F7941D] hover:bg-[#F7941D]/80">
-            升級至高級訂閱
-          </Button>
-        </div>
       </div>
     )
   }
@@ -294,6 +247,15 @@ Your answer should be concise (around 100-150 words), authentic, and show that y
           呢個係一個由人工智能驅動嘅工具，可以幫到您解答幼稚園面試父母最常見嘅五個問題。只要簡單揀選區域然後揀選學校，我哋嘅人工智能工具就會提供答案
         </p>
       </div>
+
+      {/* Disclaimer */}
+      <Alert className="mb-8 bg-blue-50 border-blue-200">
+        <Info className="h-4 w-4 text-blue-600" />
+        <AlertDescription className="text-blue-800">
+          <strong>免責聲明</strong> -
+          此工具提供的資訊由人工智能生成，僅供參考之用，未經驗證不得視為專業建議或事實。建議使用者在依賴該資訊進行決策或其他用途前，獨立驗證其正確性。
+        </AlertDescription>
+      </Alert>
 
       <div className="bg-white rounded-lg shadow-md p-8 mb-8 border border-[#E6E6FA]">
         <h2 className="text-2xl font-bold text-[#6A5ACD] mb-6">選擇學校</h2>

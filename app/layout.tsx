@@ -41,7 +41,7 @@ export default function RootLayout({
           <main className="flex-grow">{children}</main>
           <footer className="bg-[#294F91] text-white py-12">
             <div className="container mx-auto px-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 gap-8">
                 <div>
                   <div className="mb-4">
                     <Image
@@ -53,50 +53,6 @@ export default function RootLayout({
                     />
                   </div>
                   <p className="text-white/80">幫助家長尋找最適合他們孩子的學校。</p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold mb-4">快速連結</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <a href="/schools" className="text-white/80 hover:text-white">
-                        學校搜尋
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/subscription" className="text-white/80 hover:text-white">
-                        訂閱計劃
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/about" className="text-white/80 hover:text-white">
-                        關於我們
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold mb-4">聯絡我們</h3>
-                  <ul className="space-y-2">
-                    <li className="text-white/80">電子郵件: support@smartstart.one</li>
-                    <li className="text-white/80">電話: +852 1234 5678</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold mb-4">關注我們</h3>
-                  <div className="flex space-x-4">
-                    <a href="#" className="text-white/80 hover:text-white">
-                      Facebook
-                    </a>
-                    <a href="#" className="text-white/80 hover:text-white">
-                      Instagram
-                    </a>
-                    <a href="#" className="text-white/80 hover:text-white">
-                      Twitter
-                    </a>
-                  </div>
                 </div>
               </div>
 

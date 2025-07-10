@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Search, MapPin, Globe, Phone } from "lucide-react"
+import { AlertCircle, Search, MapPin, Globe, Phone, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 // Initialize Supabase client with error handling
@@ -138,69 +138,8 @@ export default function ParentsCommentsPage() {
 
   // Check if user has premium subscription
   useEffect(() => {
-    async function checkSubscription() {
-      if (!supabase || !authInitialized) return
-
-      try {
-        // Get current user with error handling
-        const { data, error: userError } = await supabase.auth.getUser().catch((err) => {
-          console.error("Auth getUser error caught:", err)
-          return { data: { user: null }, error: err }
-        })
-
-        if (userError) {
-          console.error("Error getting user:", userError)
-          // Don't redirect, just show demo data
-          setIsPremium(true) // For demo purposes
-          return
-        }
-
-        const user = data?.user
-        if (!user) {
-          console.log("No user found, continuing in demo mode")
-          // For demo purposes, still show the page
-          setIsPremium(true)
-          return
-        }
-
-        // Check if user has premium subscription
-        try {
-          const { data: subscription, error } = await supabase
-            .from("subscriptions")
-            .select("*")
-            .eq("user_id", user.id)
-            .eq("plan_type", "premium")
-            .eq("status", "active")
-            .single()
-
-          if (error && error.code !== "PGRST116") {
-            console.error("Error checking subscription:", error)
-            // For demo purposes
-            setIsPremium(true)
-            return
-          }
-
-          if (!subscription) {
-            console.log("No premium subscription found, continuing in demo mode")
-            // For demo purposes
-            setIsPremium(true)
-            return
-          }
-
-          setIsPremium(true)
-        } catch (subError) {
-          console.error("Subscription check error:", subError)
-          // For demo purposes
-          setIsPremium(true)
-        }
-      } catch (err) {
-        console.error("Unexpected error in checkSubscription:", err)
-        // For demo purposes
-        setIsPremium(true)
-      }
-    }
-
-    checkSubscription()
+    // Allow all users to access this feature
+    setIsPremium(true)
   }, [authInitialized])
 
   // Fetch districts and schools
@@ -481,11 +420,6 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
-        <div className="text-center mt-8">
-          <Button onClick={() => router.push("/subscription")} className="bg-[#F7941D] hover:bg-[#F7941D]/80">
-            升級至高級訂閱
-          </Button>
-        </div>
       </div>
     )
   }
@@ -493,6 +427,15 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-[#F7941D] mb-8">家長評論</h1>
+
+      {/* Disclaimer */}
+      <Alert className="mb-8 bg-blue-50 border-blue-200">
+        <Info className="h-4 w-4 text-blue-600" />
+        <AlertDescription className="text-blue-800">
+          <strong>免責聲明</strong> -
+          此工具提供的資訊來源於線上討論論壇和由人工智能生成，僅供參考之用，未經驗證不得視為專業建議或事實。建議使用者在依賴該資訊進行決策或其他用途前，獨立驗證其正確性。
+        </AlertDescription>
+      </Alert>
 
       {/* Search and Filters */}
       <div className="mb-8">
