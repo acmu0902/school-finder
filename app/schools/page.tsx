@@ -177,18 +177,18 @@ export default function SchoolsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="relative">
               <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
-                <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white">
+                <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-black">
                   <SelectValue placeholder="選擇地區" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#E6F4FF]">
-                  <SelectItem value="all" className="text-[#0D47A1] data-[highlighted]:bg-gray-200">
+                  <SelectItem value="all" className="text-[#003366] data-[highlighted]:bg-gray-200">
                     所有地區
                   </SelectItem>
                   {districts.map((district) => (
                     <SelectItem
                       key={district}
                       value={district}
-                      className="text-[#0D47A1] data-[highlighted]:bg-gray-200"
+                      className="text-[#003366] data-[highlighted]:bg-gray-200"
                     >
                       {district}
                     </SelectItem>
@@ -199,15 +199,15 @@ export default function SchoolsPage() {
 
             <div className="relative">
               <Select value={selectedSchoolType} onValueChange={setSelectedSchoolType}>
-                <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white">
+                <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-black">
                   <SelectValue placeholder="學校類型" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#E6F4FF]">
-                  <SelectItem value="all" className="text-[#0D47A1] data-[highlighted]:bg-gray-200">
+                  <SelectItem value="all" className="text-[#003366] data-[highlighted]:bg-gray-200">
                     所有類型
                   </SelectItem>
                   {schoolTypes.map((type) => (
-                    <SelectItem key={type} value={type} className="text-[#0D47A1] data-[highlighted]:bg-gray-200">
+                    <SelectItem key={type} value={type} className="text-[#003366] data-[highlighted]:bg-gray-200">
                       {type}
                     </SelectItem>
                   ))}
@@ -217,15 +217,15 @@ export default function SchoolsPage() {
 
             <div className="relative">
               <Select value={selectedGender} onValueChange={setSelectedGender}>
-                <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white">
+                <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-black">
                   <SelectValue placeholder="性別" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#E6F4FF]">
-                  <SelectItem value="all" className="text-[#0D47A1] data-[highlighted]:bg-gray-200">
+                  <SelectItem value="all" className="text-[#003366] data-[highlighted]:bg-gray-200">
                     所有性別
                   </SelectItem>
                   {genders.map((gender) => (
-                    <SelectItem key={gender} value={gender} className="text-[#0D47A1] data-[highlighted]:bg-gray-200">
+                    <SelectItem key={gender} value={gender} className="text-[#003366] data-[highlighted]:bg-gray-200">
                       {gender}
                     </SelectItem>
                   ))}

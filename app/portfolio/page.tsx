@@ -345,15 +345,15 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="relative">
             <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
-              <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white">
+              <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-black">
                 <SelectValue placeholder="選擇地區" />
               </SelectTrigger>
               <SelectContent className="bg-[#E6F4FF]">
-                <SelectItem value="all" className="text-[#0092D0] data-[highlighted]:bg-gray-200">
+                <SelectItem value="all" className="text-[#003366] data-[highlighted]:bg-gray-200">
                   所有地區
                 </SelectItem>
                 {districts.map((district) => (
-                  <SelectItem key={district} value={district} className="text-[#0092D0] data-[highlighted]:bg-gray-200">
+                  <SelectItem key={district} value={district} className="text-[#003366] data-[highlighted]:bg-gray-200">
                     {district}
                   </SelectItem>
                 ))}
@@ -367,7 +367,7 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
               onValueChange={setSelectedSchool}
               disabled={!selectedDistrict || filteredSchools.length === 0}
             >
-              <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white">
+              <SelectTrigger className="w-full bg-white border border-blue-200 rounded-full h-12 px-4 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-black">
                 <SelectValue placeholder={selectedDistrict ? "選擇學校" : "請先選擇地區"} />
               </SelectTrigger>
               <SelectContent className="bg-[#E6F4FF]">
@@ -375,7 +375,7 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
                   <SelectItem
                     key={school.id}
                     value={school.id}
-                    className="text-[#0092D0] data-[highlighted]:bg-gray-200"
+                    className="text-[#003366] data-[highlighted]:bg-gray-200"
                   >
                     {school.name}
                   </SelectItem>

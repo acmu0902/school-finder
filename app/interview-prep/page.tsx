@@ -263,18 +263,21 @@ Your answer should be concise (around 100-150 words), authentic, and show that y
         <div className="mb-6">
           <label className="block text-[#6A5ACD] font-medium mb-2">地區</label>
           <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
-            <SelectTrigger className="w-full bg-white border-gray-300 focus:border-[#6A5ACD] focus:ring focus:ring-[#E6E6FA] h-12">
+            <SelectTrigger className="w-full bg-white border-gray-300 focus:border-[#6A5ACD] focus:ring focus:ring-[#E6E6FA] h-12 text-black">
               <SelectValue placeholder="選擇地區" />
             </SelectTrigger>
             <SelectContent className="bg-[#f5f5f5] border-none shadow-md">
-              <SelectItem value="all" className="py-3 px-4 hover:bg-[#e8e8e8] focus:bg-[#e8e8e8] cursor-pointer">
+              <SelectItem
+                value="all"
+                className="py-3 px-4 hover:bg-[#e8e8e8] focus:bg-[#e8e8e8] cursor-pointer text-[#003366]"
+              >
                 所有地區
               </SelectItem>
               {districts.map((district) => (
                 <SelectItem
                   key={district}
                   value={district}
-                  className="py-3 px-4 hover:bg-[#e8e8e8] focus:bg-[#e8e8e8] cursor-pointer flex items-center justify-between"
+                  className="py-3 px-4 hover:bg-[#e8e8e8] focus:bg-[#e8e8e8] cursor-pointer flex items-center justify-between text-[#003366]"
                 >
                   <span>{district}</span>
                 </SelectItem>
@@ -290,7 +293,7 @@ Your answer should be concise (around 100-150 words), authentic, and show that y
             onValueChange={setSelectedSchool}
             disabled={!selectedDistrict || filteredSchools.length === 0}
           >
-            <SelectTrigger className="w-full bg-white border-gray-300 focus:border-[#6A5ACD] focus:ring focus:ring-[#E6E6FA] h-12">
+            <SelectTrigger className="w-full bg-white border-gray-300 focus:border-[#6A5ACD] focus:ring focus:ring-[#E6E6FA] h-12 text-black">
               <SelectValue placeholder={selectedDistrict ? "選擇學校" : "請先選擇地區"} />
             </SelectTrigger>
             <SelectContent className="bg-[#f5f5f5] border-none shadow-md">
@@ -298,7 +301,7 @@ Your answer should be concise (around 100-150 words), authentic, and show that y
                 <SelectItem
                   key={school.id}
                   value={school.id}
-                  className="py-3 px-4 hover:bg-[#e8e8e8] focus:bg-[#e8e8e8] cursor-pointer flex items-center justify-between"
+                  className="py-3 px-4 hover:bg-[#e8e8e8] focus:bg-[#e8e8e8] cursor-pointer flex items-center justify-between text-[#003366]"
                 >
                   <span>{school.name}</span>
                 </SelectItem>
