@@ -189,13 +189,13 @@ ${parentsComments}
 
 Format your response as a JSON object with two arrays: "pros" and "cons", each containing 3-5 points.`
 
-      // Call our API route to generate pros and cons
+      // Call our API route to generate pros and cons with lower creativity
       const response = await fetch("/api/grok", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, temperature: 0.3 }),
       })
 
       if (!response.ok) {
@@ -244,13 +244,13 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
     for (const category of categories) {
       const prompt = `你是一個幫助家長了解學校的AI助手。請為"${schoolName}"生成一個關於"${category}"的家長評論摘要。評論應該是5個要點的簡短摘要，每個要點一句話，使用繁體中文，並以家長的角度撰寫。`
 
-      // Call our API route to generate comment
+      // Call our API route to generate comment with lower creativity
       const response = await fetch("/api/grok", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, temperature: 0.3 }),
       })
 
       if (!response.ok) {

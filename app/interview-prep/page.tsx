@@ -181,13 +181,13 @@ Question: ${question.question}
 Your answer should be concise (around 100-150 words), authentic, and show that you've done your research about the school.`
 
         try {
-          // Call our own API route with improved error handling
+          // Call our own API route with higher creativity for interview prep (0.7)
           const response = await fetch("/api/grok", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ prompt }),
+            body: JSON.stringify({ prompt, temperature: 0.7 }),
           })
 
           if (!response.ok) {

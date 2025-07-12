@@ -2,11 +2,11 @@ import { NextResponse } from "next/server"
 
 // Use environment variable for API key
 const GROK_API_KEY = process.env.XAI_API_KEY
-const GROK_MODEL = "grok-2-1212" // Updated to use the correct model name
+const GROK_MODEL = "grok-3" // Updated to use grok-3 model
 
 export async function POST(request: Request) {
   try {
-    const { prompt } = await request.json()
+    const { prompt, temperature = 0.7 } = await request.json()
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 })
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
             content: prompt,
           },
         ],
-        temperature: 0.7,
+        temperature: temperature,
       }),
     })
 
