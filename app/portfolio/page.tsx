@@ -174,7 +174,7 @@ export default function ParentsCommentsPage() {
     fetchSchoolDetailsAndComments()
   }, [selectedSchool])
 
-  // Generate pros and cons using Grok AI based on parents_comments
+  // Organize pros and cons using Grok AI based on parents_comments
   const generateProsAndCons = async (schoolName: string, parentsComments: string) => {
     setIsLoadingProsAndCons(true)
 
@@ -235,14 +235,14 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
     }
   }
 
-  // Generate comments using Grok AI
+  // Organize comments using Grok AI
   const generateCommentsWithAI = async (schoolName: string) => {
     const categories = ["學校用品同校服", "學術課程同教學質素", "學校政策同程序", "學生福祉同體驗", "招生同入學"]
 
-    const generatedComments = []
+    const organizedComments = []
 
     for (const category of categories) {
-      const prompt = `你是一個幫助家長了解學校的AI助手。請為"${schoolName}"生成一個關於"${category}"的家長評論摘要。評論應該是5個要點的簡短摘要，每個要點一句話，使用繁體中文，並以家長的角度撰寫。`
+      const prompt = `你是一個幫助家長了解學校的AI助手。請為"${schoolName}"整理一個關於"${category}"的家長評論摘要。評論應該是5個要點的簡短摘要，每個要點一句話，使用繁體中文，並以家長的角度撰寫。`
 
       // Call our API route to generate comment with lower creativity
       const response = await fetch("/api/grok", {
@@ -265,15 +265,15 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
 
       const comment = data.choices[0].message.content
 
-      generatedComments.push({
-        id: generatedComments.length + 1,
+      organizedComments.push({
+        id: organizedComments.length + 1,
         school_name: schoolName,
         comment,
         category,
       })
     }
 
-    setComments(generatedComments)
+    setComments(organizedComments)
   }
 
   const handleSearch = (e: React.FormEvent) => {
@@ -318,7 +318,7 @@ Format your response as a JSON object with two arrays: "pros" and "cons", each c
         <Info className="h-4 w-4 text-blue-600" />
         <AlertDescription className="text-blue-800">
           <strong>免責聲明</strong> -
-          此工具提供的資訊來源於線上討論論壇和由人工智能生成，僅供參考之用，未經驗證不得視為專業建議或事實。建議使用者在依賴該資訊進行決策或其他用途前，獨立驗證其正確性。
+          此工具提供的資訊來源於線上討論論壇和由人工智能整理，僅供參考之用，未經驗證不得視為專業建議或事實。建議使用者在依賴該資訊進行決策或其他用途前，獨立驗證其正確性。
         </AlertDescription>
       </Alert>
 

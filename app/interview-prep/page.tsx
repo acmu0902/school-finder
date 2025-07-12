@@ -253,7 +253,7 @@ Your answer should be concise (around 100-150 words), authentic, and show that y
         <Info className="h-4 w-4 text-blue-600" />
         <AlertDescription className="text-blue-800">
           <strong>免責聲明</strong> -
-          此工具提供的資訊由人工智能生成，僅供參考之用，未經驗證不得視為專業建議或事實。建議使用者在依賴該資訊進行決策或其他用途前，獨立驗證其正確性。
+          此工具提供的資訊由人工智能整理，僅供參考之用，未經驗證不得視為專業建議或事實。建議使用者在依賴該資訊進行決策或其他用途前，獨立驗證其正確性。
         </AlertDescription>
       </Alert>
 
